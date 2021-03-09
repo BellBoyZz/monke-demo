@@ -16,6 +16,9 @@ class MonkeyGame(tkk.Frame):
         self.canvas = tk.Canvas(self, borderwidth=0, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, highlightthickness=0)
         self.canvas.grid(sticky="news")
 
+        self.banana_image = tk.PhotoImage(file='banana.png')
+        self.banana = self.canvas.create_image(10, 10, image=self.banana_image)
+
 
 if __name__ == '__main__':
     root = tk.Tk()
@@ -24,3 +27,4 @@ if __name__ == '__main__':
     # do not allow window resizing
     root.resizable(False, False)
     app = MonkeyGame(root)
+    root.mainloop()
