@@ -4,6 +4,8 @@ import tkinter.ttk as tkk
 CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 500
 
+UPDATE_DELAY = 33
+
 
 class Sprite():
     def __init__(self, canvas, image_filename, x=0, y=0):
@@ -19,8 +21,18 @@ class Sprite():
         self.canvas_object_id = self.canvas.create_image(
             self.x,
             self.y,
-            image=self.photo_image
-        )
+            image=self.photo_image)
+
+    def render(self):
+        self.canvas.coords(self.canvas_object_id, self.x, self.y)
+
+    def update(self):
+        pass
+
+
+class Banana(Sprite):
+    def update(self):
+        self.x += 5
 
 
 class MonkeyGame(tkk.Frame):
@@ -30,14 +42,23 @@ class MonkeyGame(tkk.Frame):
         self.grid(sticky="news")
         self.create_widgets()
 
-        self.create_sprite()
+        self.create_sprites()
 
     def create_widgets(self):
         self.canvas = tk.Canvas(self, borderwidth=0, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, highlightthickness=0)
         self.canvas.grid(sticky="news")
 
-    def create_sprite(self):
-        self.banana = Sprite(self.canvas, 'banana.png', 100, 100)
+    def create_sprites(self):
+        self.banana = Banana(self.canvas, 'banana.png', 100, 100)
+
+    def animate(self):
+        self.banana.update()
+        self.banana.render()
+
+        self.after(UPDATE_DELAY, self.animate)
+
+    def start(self):
+        self.after(0, self.animate)
 
 
 if __name__ == '__main__':
@@ -47,4 +68,5 @@ if __name__ == '__main__':
     # do not allow window resizing
     root.resizable(False, False)
     app = MonkeyGame(root)
+    app.start()
     root.mainloop()
