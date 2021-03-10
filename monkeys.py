@@ -49,31 +49,43 @@ class Banana(Sprite):
         self.vy -= GRAVITY
 
 
-class MonkeyGame(tkk.Frame):
+class GameApp(tkk.Frame):
 
     def __init__(self, parent):
         super().__init__(parent)
         self.grid(sticky="news")
-        self.create_widgets()
+        self.create_canvas()
 
-        self.create_sprites()
+        self.sprites = []
+        self.init_game()
 
-    def create_widgets(self):
+    def create_canvas(self):
         self.canvas = tk.Canvas(self, borderwidth=0, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, highlightthickness=0)
         self.canvas.grid(sticky="news")
 
-    def create_sprites(self):
-        self.banana = Banana(self.canvas, 'banana.png', 100, 400)
-        self.banana.set_speed(15, 25)
-
     def animate(self):
-        self.banana.update()
-        self.banana.render()
+        for sprite in self.sprites:
+            sprite.update()
+            sprite.render()
 
         self.after(UPDATE_DELAY, self.animate)
 
     def start(self):
         self.after(0, self.animate)
+
+    def init_game(self):
+        pass
+
+
+class MonkeyGame(GameApp):
+    def create_sprites(self):
+        self.banana = Banana(self.canvas, 'banana.png', 100, 400)
+        self.banana.set_speed(15, 25)
+
+    def init_game(self):
+        self.create_sprites()
+
+        self.sprites.append(self.banana)
 
 
 if __name__ == '__main__':
