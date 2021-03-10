@@ -5,6 +5,7 @@ CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 500
 
 UPDATE_DELAY = 33
+GRAVITY = 1
 
 
 class Sprite():
@@ -26,13 +27,26 @@ class Sprite():
     def render(self):
         self.canvas.coords(self.canvas_object_id, self.x, self.y)
 
+    def init_sprite(self):
+        pass
+
     def update(self):
         pass
 
 
 class Banana(Sprite):
+    def init_sprite(self):
+        self.vx = 0
+        self.vy = 0
+
+    def set_speed(self, vx, vy):
+        self.vx = vx
+        self.vy = vy
+
     def update(self):
         self.x += 5
+        self.y -= self.vy
+        self.vy -= GRAVITY
 
 
 class MonkeyGame(tkk.Frame):
@@ -49,7 +63,8 @@ class MonkeyGame(tkk.Frame):
         self.canvas.grid(sticky="news")
 
     def create_sprites(self):
-        self.banana = Banana(self.canvas, 'banana.png', 100, 100)
+        self.banana = Banana(self.canvas, 'banana.png', 100, 400)
+        self.banana.set_speed(15, 25)
 
     def animate(self):
         self.banana.update()
